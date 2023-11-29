@@ -9,6 +9,9 @@ import SwiftUI
 
 @main
 struct MemorizeApp: App {
+    
+//   hello changes
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
