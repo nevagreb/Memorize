@@ -7,6 +7,7 @@
 
 import Foundation
 
+//Model for MemoryGame
 struct MemoryGame<CardContent> where CardContent: Equatable {
     //access control
     private(set) var cards: Array<Card>
@@ -14,8 +15,8 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     
     init(numberOfPairsOfCards: Int, cardContentFactory: (Int) -> CardContent) {
         cards = Array<Card>()
-        //add number of cards x 2
         
+        //add number of cards x 2
         for pairIndex in 0 ..< max(2, numberOfPairsOfCards) {
             let content = cardContentFactory(pairIndex)
             cards.append(Card(content: content, id: "\(pairIndex + 1)a"))

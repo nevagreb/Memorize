@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+//ViewModifier, using to make cards
 struct Cardify: ViewModifier, Animatable {
     var isFaceUp: Bool {
         rotation < 90

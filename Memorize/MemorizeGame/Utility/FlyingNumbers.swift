@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+//Animation to draw attention to the match or mismatch
 struct FlyingNumbers: View {
     let number: Int
     @State private var offset: CGFloat = 0

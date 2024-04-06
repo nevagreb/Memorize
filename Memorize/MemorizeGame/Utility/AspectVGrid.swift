@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+//Grid, using adaptive card size
 struct AspectVGrid<Item: Identifiable, ItemView: View>: View {
     var items: [Item]
     var aspectRatio: CGFloat = 1

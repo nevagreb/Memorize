@@ -5,50 +5,28 @@
 //  Created by Kristina Grebneva on 07.12.2023.
 //
 
+//ViewModel for MemoryGame
 import Foundation
+import SwiftUI
 
 struct Themes {
-    var all: [Theme] = []
     var currentTheme: Theme
     
-    func getRandomTheme() -> Theme {
-        all.randomElement() ?? all[0]
-    }
-    
-    init() {
-        all.append(Theme(name: "Animals", emoji: ["🐶", "🐯", "🐨", "🐰", "🦆", "🐌", "🐢", "🐮", "🐝"], color: "orange"))
-        all.append(Theme(name: "Vehicle", emoji: ["🚗", "🚅", "✈️", "🚀", "🛥️", "🛵", "🛴", "🚁", "⛵️"], color: "red"))
-        all.append(Theme(name: "Food", emoji: ["🍏", "🍌", "🍔", "🥓", "🍣", "🥩","🍳", "🥞", "🥑"], color: "yellow"))
-        all.append(Theme(name: "Body", emoji: ["🦷", "👅", "👁️", "👂🏿", "🧠", "🫀", "👃🏽", "🦶🏼"], color: "blue"))
-        all.append(Theme(name: "Jobs", emoji: ["💂‍♀️", "👮‍♀️", "🕵️‍♀️", "👩‍🏫", "🧑‍💻", "👩‍⚖️", "🥷", "👨‍🔬"], color: "green"))
-        all.append(Theme(name: "Clothes", emoji: ["🧥", "🩲", "👙", "👘", "👗", "👖", "👠", "🧤"], color: "purple"))
-        
-        currentTheme = all.randomElement() ?? all[0]
+    init(theme: EmojiTheme) {
+        currentTheme = Theme(name: theme.name, emoji: theme.currentKit, color: theme.color)
     }
     
     struct Theme {
         var name: String
         var emoji: [String]
-        var color: String
+        var color: Color
     }
 }
 
 class EmojiMemoryGame: ObservableObject {
     @Published private var model: MemoryGame<String>
     
-    static var theme = Themes().getRandomTheme()
-    
-    static func createMemoryGame() -> MemoryGame<String> {
-        let maxNumberOfPairsOfCards = theme.emoji.count
-        
-        return MemoryGame(numberOfPairsOfCards: Int.random(in: 2...maxNumberOfPairsOfCards)) { pairIndex in
-            if theme.emoji.indices.contains(pairIndex) {
-                return theme.emoji[pairIndex]
-            } else {
-                return "⁉️"
-            }
-            }
-    }
+    var theme: Themes.Theme
     
     var cards: Array<MemoryGame<String>.Card> {
         return model.cards
@@ -59,20 +37,14 @@ class EmojiMemoryGame: ObservableObject {
     }
     
     var themeName: String {
-        return EmojiMemoryGame.theme.name
+        return theme.name
     }
     
-    var themeColor: String {
-        return EmojiMemoryGame.theme.color
+    var themeColor: Color {
+        return theme.color
     }
     
     // MARK: - Intents
-    
-    func start() {
-        EmojiMemoryGame.theme = Themes().getRandomTheme()
-        model = EmojiMemoryGame.createMemoryGame()
-        model.shuffle()
-    }
     
     func shuffle() {
         model.shuffle()
@@ -82,12 +54,12 @@ class EmojiMemoryGame: ObservableObject {
         model.choose(card)
     }
     
-    init() {
-        let maxNumberOfPairsOfCards = EmojiMemoryGame.theme.emoji.count
+    init(theme: EmojiTheme) {
+        self.theme = Themes(theme: theme).currentTheme
         
-        model = MemoryGame(numberOfPairsOfCards: Int.random(in: 2...maxNumberOfPairsOfCards)) { pairIndex in
-            if EmojiMemoryGame.theme.emoji.indices.contains(pairIndex) {
-                return EmojiMemoryGame.theme.emoji[pairIndex]
+        model = MemoryGame(numberOfPairsOfCards: theme.number) { pairIndex in
+            if theme.currentKit.indices.contains(pairIndex) {
+                return theme.currentKit[pairIndex]
             } else {
                 return "⁉️"
             }
@@ -96,3 +68,5 @@ class EmojiMemoryGame: ObservableObject {
         model.shuffle()
     }
 }
+
+

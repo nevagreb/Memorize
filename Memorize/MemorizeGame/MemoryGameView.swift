@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+//MemoryGameView
 struct Emoji {
     var name: String
     var collection: [String]
@@ -17,47 +18,24 @@ struct Emoji {
 struct MemoryGameView: View {
     @ObservedObject var viewModel: EmojiMemoryGame
     
-    var colors: [String: Color]? = ["orange": .orange,
-                                    "red" : .red,
-                                    "green": .green,
-                                    "blue": .blue,
-                                    "yellow": .yellow,
-                                    "purple": .purple]
-    
     private let dealAnimation: Animation = .easeInOut(duration: 0.5)
     private let dealInterval: TimeInterval = 0.1
     private let deckWidth: CGFloat = 50
     private let aspectRatio: CGFloat = 2/3
     
     var body: some View {
-        NavigationView {
             VStack {
                 cards
+                Spacer()
+                
                 VStack {
                     deck
-                    Spacer()
                     score
-                    Spacer()
                 }
-                .frame(height: 30)
             }
-            .padding()
             .navigationTitle(viewModel.themeName)
-            .toolbar {
-                ToolbarItemGroup(placement: .topBarTrailing) {
-                    startNewGame
-                }
-                
-            }
-        }
+            .navigationBarTitleDisplayMode(.inline)
         
-    }
-    
-    var startNewGame: some View {
-        Button("New Game") {
-            dealt.removeAll()
-            viewModel.start()
-        }
     }
     
     var score: some View {
@@ -79,9 +57,8 @@ struct MemoryGameView: View {
                     .transition(.asymmetric(insertion: .identity, removal: .identity))
             }
         }
-        .foregroundColor(colors?[viewModel.themeColor] ?? Color.gray)
+        .foregroundColor(viewModel.themeColor)
     }
-    
     
     @State private var dealt = Set<Card.ID>()
     
@@ -104,7 +81,7 @@ struct MemoryGameView: View {
             }
             .frame(width: deckWidth, height: deckWidth / aspectRatio)
         }
-        .foregroundColor(colors?[viewModel.themeColor] ?? Color.gray)
+        .foregroundColor(viewModel.themeColor)
         .onTapGesture {
            deal()
         }
@@ -158,6 +135,6 @@ struct CardView: View {
     }
 }
 
-#Preview {
-    MemoryGameView(viewModel: EmojiMemoryGame())
-}
+//#Preview {
+//    MemoryGameView(viewModel: EmojiMemoryGame())
+//}

@@ -10,11 +10,11 @@ import SwiftUI
 @main
 struct MemorizeApp: App {
     
-//   hello changes
+    @StateObject var themes = EmojiDocument()
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            EmojiChooserView(themes: themes)
         }
     }
 }
